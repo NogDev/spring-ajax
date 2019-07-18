@@ -45,7 +45,7 @@ public class Promocao implements Serializable{
 	@Column(name="descricao")
 	private String descricao;
 	
-	@Column(name="link_image", nullable=false)
+	@Column(name="link_imagem", nullable=false)
 	private String linkImagem;
 	
 	@NumberFormat(style = Style.CURRENCY, pattern = "#,##0.00")
