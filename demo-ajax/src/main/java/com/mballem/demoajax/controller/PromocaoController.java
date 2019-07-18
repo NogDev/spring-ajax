@@ -35,7 +35,7 @@ import com.mballem.demoajax.repository.PromocaoRepository;
 @RequestMapping("/promocao")
 public class PromocaoController {
 	
-	private static Logger log = LoggerFactory.getLogger(PromocaoController.class);
+	private static Logger log = LoggerFactory.getLogger(Promocao.class);
 	
 	@Autowired
 	public CategoriaRepository categoriaRepository;
