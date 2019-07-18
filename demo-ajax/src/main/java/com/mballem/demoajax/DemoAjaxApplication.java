@@ -5,7 +5,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.mballem.demoajax.domain.SocialMetaTag;
 import com.mballem.demoajax.service.SocialMetaTagService;
 
 @SpringBootApplication
@@ -21,8 +20,8 @@ public class DemoAjaxApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 
-		SocialMetaTag tag = service.getSocialMetatagByUrl("https://www.pichau.com.br/headset-logitech-g933-artemis-spectrum-7-1-surround-usb-wireless-981-000598");
-		System.out.println(tag);
+//		SocialMetaTag tag = service.getSocialMetatagByUrl("https://www.pichau.com.br/headset-logitech-g933-artemis-spectrum-7-1-surround-usb-wireless-981-000598");
+//		System.out.println(tag);
 
 	}
 }
