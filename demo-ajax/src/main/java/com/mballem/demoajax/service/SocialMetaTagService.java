@@ -7,6 +7,8 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.mballem.demoajax.domain.SocialMetaTag;
@@ -19,7 +21,22 @@ import com.mballem.demoajax.domain.SocialMetaTag;
 @Service
 public class SocialMetaTagService {
 
-	public SocialMetaTag getTeitterCardByUrl(String url) {
+	private static Logger log = LoggerFactory.getLogger(SocialMetaTag.class);
+	
+	public SocialMetaTag getSocialMetatagByUrl(String url) {
+		SocialMetaTag twitter = getTwitterCardByUrl(url);
+		if(!isEmpty(twitter)) {
+			return twitter;
+		}
+		
+		SocialMetaTag openGraph = getOpenGraphByUrl(url);
+		if(!isEmpty(openGraph)) {
+			return openGraph;
+		}
+		return null;
+	}
+	
+	private SocialMetaTag getTwitterCardByUrl(String url) {
 		SocialMetaTag tag = new SocialMetaTag();
 
 		try {
@@ -29,12 +46,12 @@ public class SocialMetaTagService {
 			tag.setImage(doc.head().select("meta[name=twitter:image]").attr("content"));
 			tag.setUrl(doc.head().select("meta[name=twitter:url]").attr("content"));
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e.getCause());
 		}
 		return tag;
 	}
 
-	public SocialMetaTag getOpenGraphByUrl(String url) {
+	private SocialMetaTag getOpenGraphByUrl(String url) {
 		SocialMetaTag tag = new SocialMetaTag();
 
 		try {
@@ -44,9 +61,17 @@ public class SocialMetaTagService {
 			tag.setImage(doc.head().select("meta[property=og:image]").attr("content"));
 			tag.setUrl(doc.head().select("meta[property=og:url]").attr("content"));
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e.getCause());
 		}
 		return tag;
+	}
+	
+	private boolean isEmpty(SocialMetaTag tag) {
+		if(tag.getImage().isEmpty() ||
+		   tag.getSite().isEmpty() ||
+		   tag.getTitle().isEmpty() ||
+		   tag.getUrl().isEmpty()) return true;
+		return false;
 	}
 
 }
