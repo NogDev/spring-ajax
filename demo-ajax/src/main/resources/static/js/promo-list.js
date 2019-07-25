@@ -60,3 +60,9 @@ function loadByScroolBar(pageNumber) {
 		}
 	})
 }
+
+//adcionar likes
+$("button[id*='likes-btn-']").on("click", function() {
+	var id = $(this).attr("id").split("-")[2];
+	console.log("id", id);
+});
