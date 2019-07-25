@@ -62,7 +62,7 @@ function loadByScroolBar(pageNumber) {
 }
 
 //adcionar likes
-$("button[id*='likes-btn-']").on("click", function() {
+$(document).on("click","button[id*='likes-btn-']" ,function() {
 	var id = $(this).attr("id").split("-")[2];
 	console.log("id", id);
 	
