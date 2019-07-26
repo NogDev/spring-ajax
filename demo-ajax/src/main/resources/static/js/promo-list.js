@@ -62,15 +62,15 @@ function loadByScroolBar(pageNumber) {
 }
 
 //adcionar likes
-$(document).on("click","button[id*='likes-btn-']" ,function() {
+$(document).on("click","button[id*='likes-btn-']",function() {
 	var id = $(this).attr("id").split("-")[2];
-	console.log("id", id);
+	console.log("id ", id);
 	
 	$.ajax({
 		 method: "POST",
-		 url: "/promocao/like/" + id,
+		 url: "/promocao/likes/" + id,
 		 success: function(response) {
-			 $("likes-count-" + id).text(response);
+				$("#likes-count-" + id).text(response);
 		},
 		error: function(xhr) {
 			alert("Ops... Ocorreu um erro: " + xhr.status + ", "+ xhr.statusText);
