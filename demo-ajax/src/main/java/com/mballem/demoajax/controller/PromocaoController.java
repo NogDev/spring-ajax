@@ -48,14 +48,23 @@ public class PromocaoController {
 	@Autowired
 	public PromocaoRepository promocaoRepository;
 	
+	//autocomplete
+	@GetMapping("/site")
+	public ResponseEntity<?> autocompleteByTermo(@RequestParam("termo") String termo){
+		List<String> sites = promocaoRepository.findSitesByTermo(termo);
+		
+		return ResponseEntity.ok(sites);
+	}
 	
+	
+	
+	// add likes
 	@PostMapping("/likes/{id}")
 	public ResponseEntity<?> adicionarLikes(@PathVariable("id") Long id) {
 		promocaoRepository.updateSomarLikes(id);
 		int likes = promocaoRepository.findLikesById(id);
 		return ResponseEntity.ok(likes);
 	}
-	
 	
 	@GetMapping("/list")
 	public String listarOfertas(ModelMap model) {
