@@ -28,12 +28,14 @@ $(window).scroll(function() {
 
 
 function loadByScroolBar(pageNumber) {
+	var site = $("#autocomplete-input").val();
 	
 	$.ajax({
 		method: "GET",
 		url: "list/ajax",
 		data: {
-			page: pageNumber
+			page: pageNumber,
+			site: site
 		},
 		beforeSend: function() {
 			$("#loader-img").show();
