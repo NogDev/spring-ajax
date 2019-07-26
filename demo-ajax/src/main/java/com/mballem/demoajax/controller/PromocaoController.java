@@ -39,25 +39,35 @@ import com.mballem.demoajax.repository.PromocaoRepository;
 @Controller
 @RequestMapping("/promocao")
 public class PromocaoController {
-	
+
 	private static Logger log = LoggerFactory.getLogger(Promocao.class);
-	
+
 	@Autowired
 	public CategoriaRepository categoriaRepository;
-	
+
 	@Autowired
 	public PromocaoRepository promocaoRepository;
-	
-	//autocomplete
+
+	// autocomplete
 	@GetMapping("/site")
-	public ResponseEntity<?> autocompleteByTermo(@RequestParam("termo") String termo){
+	public ResponseEntity<?> autocompleteByTermo(@RequestParam("termo") String termo) {
 		List<String> sites = promocaoRepository.findSitesByTermo(termo);
-		
+
 		return ResponseEntity.ok(sites);
 	}
-	
-	
-	
+
+	@GetMapping("/site/list")
+	public String listarPorSite(@RequestParam("site") String site, ModelMap model) {
+
+		Sort sort = new Sort(Sort.Direction.DESC, "dtCadastro");
+
+		PageRequest pageRequest = PageRequest.of(0, 8, sort);
+
+		model.addAttribute("promocoes", promocaoRepository.findBySite(site, pageRequest));
+
+		return "promo-card";
+	}
+
 	// add likes
 	@PostMapping("/likes/{id}")
 	public ResponseEntity<?> adicionarLikes(@PathVariable("id") Long id) {
@@ -65,53 +75,53 @@ public class PromocaoController {
 		int likes = promocaoRepository.findLikesById(id);
 		return ResponseEntity.ok(likes);
 	}
-	
+
 	@GetMapping("/list")
 	public String listarOfertas(ModelMap model) {
 		Sort sort = new Sort(Sort.Direction.DESC, "dtCadastro");
-		
+
 		PageRequest pageRequest = PageRequest.of(0, 8, sort);
-		
+
 		model.addAttribute("promocoes", promocaoRepository.findAll(pageRequest));
-		
+
 		return "promo-list";
 	}
 
 	@GetMapping("/list/ajax")
-	public String listarCard(@RequestParam(name= "page", defaultValue = "1") int page ,ModelMap model) {
+	public String listarCard(@RequestParam(name = "page", defaultValue = "1") int page, ModelMap model) {
 		Sort sort = new Sort(Sort.Direction.DESC, "dtCadastro");
-		
+
 		PageRequest pageRequest = PageRequest.of(page, 8, sort);
-		
+
 		model.addAttribute("promocoes", promocaoRepository.findAll(pageRequest));
-		
+
 		return "promo-card";
 	}
-	
+
 	@PostMapping("/save")
-	public ResponseEntity<?> salvarPromocao(@Valid Promocao promocao, BindingResult result){
-		
-		if(result.hasErrors()) {
+	public ResponseEntity<?> salvarPromocao(@Valid Promocao promocao, BindingResult result) {
+
+		if (result.hasErrors()) {
 			Map<String, String> errors = new HashMap<>();
-			
-			for(FieldError error : result.getFieldErrors()) {
+
+			for (FieldError error : result.getFieldErrors()) {
 				errors.put(error.getField(), error.getDefaultMessage());
 			}
 			return ResponseEntity.unprocessableEntity().body(errors);
 		}
-		
+
 		log.info("Promoção {}", promocao.toString());
 		promocao.setDtCadastro(LocalDateTime.now());
 		promocaoRepository.save(promocao);
-		
+
 		return ResponseEntity.ok().build();
 	}
-	
+
 	@ModelAttribute("categorias")
-	public List<Categoria> getCategorias(){
-		return categoriaRepository.findAll(); 
+	public List<Categoria> getCategorias() {
+		return categoriaRepository.findAll();
 	}
-	
+
 	@GetMapping("/add")
 	public String abrirCadastro() {
 		return "promo-add";
