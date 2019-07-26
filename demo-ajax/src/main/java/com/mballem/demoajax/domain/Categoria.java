@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * @author andersonnogueira
  * @since Jul 18, 2019
@@ -32,6 +34,7 @@ public class Categoria implements Serializable   {
 	@Column(name="titulo", nullable=false, unique= false)
 	private String titulo;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="categoria")
 	private List<Promocao> promocoes;
 
