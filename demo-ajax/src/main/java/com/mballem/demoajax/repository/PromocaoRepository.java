@@ -21,6 +21,11 @@ import com.mballem.demoajax.domain.Promocao;
  */
 public interface PromocaoRepository extends JpaRepository<Promocao, Long>{
 	
+	@Query("select p from Promocao p where p.site like %:search% "
+			+ "or p.titulo like %:search% "
+			+ "or p.categoria.titulo like %:search%")
+	Page<Promocao> findByTituloOrSiteOrCategoria(@Param("search") String search, Pageable pageable);
+	
 	@Query("select p from Promocao p where p.site like :site")
 	Page<Promocao> findBySite(@Param("site") String site, Pageable pageable);
 	
