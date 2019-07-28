@@ -69,7 +69,33 @@ $(document).ready(function() {
 	// exibir modal editar
 	$("#btn-editar").on('click', function() {
 		if (isSectedRow()) {
-			$("#modal-form").modal('show');
+			
+			var id = getPromoId();
+			$.ajax({
+				method: "GET",
+				url: "/promocao/edit/" + id,
+				beforeSend: function() {
+					$("#modal-form").modal('show');
+				},
+				success: function(data) {
+					$("#edt_id").val(data.id);
+					$("#edt_site").text(data.site);
+					$("#edt_titulo").val(data.titulo);
+					$("#edt_descricao").val(data.descricao);
+					$("#edt_preco").val(data.preco.toLocaleString('pt-br', {
+						minimumFractionDigits: 2,
+						maximumFractionDigits: 2
+					}));
+					$("#edt_categoria").val(data.categoria.id);
+					$("#edt_linkImagem").val(data.linkImagem);
+					$("#edt_image").attr('src', data.linkImagem);
+				}, 
+				error: function() {
+					alert("Ops... Ocorreu um erro, tente mais tarde.")
+				}
+			});
+			
+			
 		}
 	});
 	// exibir modal excluir
@@ -78,6 +104,8 @@ $(document).ready(function() {
 			$("#modal-delete").modal('show');
 		}
 	});
+	
+	
 	
 	//exclusão de uma promoção
 	$("#btn-del-modal").on('click', function() {
