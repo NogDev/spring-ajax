@@ -3,6 +3,7 @@
  */
 package com.mballem.demoajax.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -20,6 +21,9 @@ import com.mballem.demoajax.domain.Promocao;
  * @since Jul 18, 2019
  */
 public interface PromocaoRepository extends JpaRepository<Promocao, Long>{
+	
+	@Query("select p from Promocao p where preco = :preco")
+	Page<Promocao> findByPreco(@Param("preco") BigDecimal preco, Pageable pageable);
 	
 	@Query("select p from Promocao p where p.site like %:search% "
 			+ "or p.titulo like %:search% "
