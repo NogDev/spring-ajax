@@ -66,17 +66,33 @@ $(document).ready(function() {
 		}
 	});
 	
+	// exibir modal editar
 	$("#btn-editar").on('click', function() {
-		
 		if (isSectedRow()) {
 			$("#modal-form").modal('show');
 		}
 	});
-	
+	// exibir modal excluir
 	$("#btn-excluir").on('click', function() {
 		if (isSectedRow()) {
 			$("#modal-delete").modal('show');
 		}
+	});
+	
+	//exclusão de uma promoção
+	$("#btn-del-modal").on('click', function() {
+		var id = getPromoId();
+		$.ajax({
+			method: "GET",
+			url: "/promocao/delete/" + id,
+			success: function() {
+				$("#modal-delete").modal('hide');
+				table.ajax.reload();
+			},
+			error: function() {
+				alert("Ops... Ocorreu um erro, tente mais tarde.")
+			}
+		});
 	});
 	
 	
